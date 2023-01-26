@@ -51,7 +51,8 @@ class SqlDb(object):
             create_table_query = create_table_query + '\n' + column_names[i].replace(" ", "_") + ' ' + column_types[i] + ','
         create_table_query = create_table_query[:-1] + " );"
 
-        return self.query(create_table_query)
+        self.query(create_table_query)
+        self.update_table(table_name, dataframe)
 
-
-
+    def update_table(self, table_name, dataframe):
+        return None
