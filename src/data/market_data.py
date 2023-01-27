@@ -6,7 +6,8 @@ import sql_functions as sql
 
 # Global variables
 OUT_DATE_FORMAT = '%Y%m%d'
-
+DB_SERVER = "tcp:AUCLD04018656,1433"
+DB_NAME = "team_five_aiml_group"
 
 def get_price_history_yahoo(ticker, start_date, end_date, interval, sql_conn = None):
     historical_prices = yf.download(ticker, start=start_date, end=end_date, interval=interval)
@@ -20,6 +21,6 @@ def get_price_history_yahoo(ticker, start_date, end_date, interval, sql_conn = N
     return historical_prices
 
 if __name__ == "__main__":
-    conn = sql.SqlDb("tcp:AUCLD04018656,1433","team_five_aiml_group")
+    conn = sql.SqlDb(DB_SERVER, DB_NAME)
     get_price_history_yahoo("BTC-AUD", dt.datetime(2020,2,1), dt.datetime(2023,2,1), "1d", conn)
     conn.__del__
