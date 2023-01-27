@@ -11,12 +11,13 @@ import re
 
 # Global variables
 OUT_DATE_FORMAT = '%Y%m%d'
-DB_SERVER = "tcp:AUCLD04018656,1433"
-DB_NAME = "team_five_aiml_group"
 CHARS_TO_REMOVE = ['new Date(',')','[',']','"']
-
+SUPP_DATE_COL = "supp_date"
 
 def get_yahoo_price_history(ticker, start_date, end_date, interval, sql_conn = None):
+    '''
+    To complete
+    '''
     historical_prices = yf.download(ticker, start=start_date, end=end_date, interval=interval)
     historical_prices.reset_index(inplace=True)
 
@@ -27,12 +28,17 @@ def get_yahoo_price_history(ticker, start_date, end_date, interval, sql_conn = N
 
     return historical_prices
 
-def get_supp_date(url, indicator):
-
+def get_supp_data(url, indicator, start_date = pd.Timestamp.min, end_date = pd.Timestamp.max):
+    '''
+    To complete
+    '''
     # Retrieve raw data from url and preprocess
-    page_content = requests.get(url)
-    soup_content = str(page_content.content)
-    pre_processed_output = (soup_content.split('[[')[1]).split('{labels')[0][0:-2]
+    try:
+        page_content = requests.get(url)
+        soup_content = str(page_content.content)
+        pre_processed_output = (soup_content.split('[[')[1]).split('{labels')[0][0:-2]
+    except Exception as error:
+        print("Could not request content from {}".format(url))
 
     # Remove special characters from content
     for c in CHARS_TO_REMOVE:
@@ -45,15 +51,8 @@ def get_supp_date(url, indicator):
     # If series match, create dataframe
     if len(date_list)==len(data_list):
         df = pd.DataFrame()
-        df['Date'] = pd.to_datetime(date_list)
+        df[SUPP_DATE_COL] = pd.to_datetime(date_list)
         df[indicator] = data_list
-        return df
+        return df[df[SUPP_DATE_COL].between(start_date, end_date)] # filter for input dates
     else: return None
 
-
-if __name__ == "__main__":
-    """conn = sql.SqlDb(DB_SERVER, DB_NAME)
-    get_yahoo_price_history("BTC-AUD", dt.datetime(2019,2,1), dt.datetime(2023,2,1), "1d", conn)
-    conn.__del__ """
-
-    get_supp_date('https://bitinfocharts.com/comparison/size-btc.html', 'avg block size')

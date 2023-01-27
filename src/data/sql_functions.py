@@ -1,6 +1,6 @@
 # Libraries to import
 import pyodbc
-
+import re
 
 # Global variables
 DATA_TYPE_MAPPING = {
@@ -8,6 +8,7 @@ DATA_TYPE_MAPPING = {
     ,   'float64'   : 'float'
     ,   'bool'      : 'boolean'
     ,   'datetime64[ns, UTC]'   :   'datetime'
+    ,   'datetime64[ns]'        :   'datetime'
 }
 
 
@@ -15,7 +16,7 @@ def get_column_types(pd_data_types):
     sql_data_types = []
 
     for c in pd_data_types:
-        sql_data_types.append(DATA_TYPE_MAPPING.get(str(c), "varchar"))
+        sql_data_types.append(DATA_TYPE_MAPPING.get(str(c), "varchar (255)"))
 
     return sql_data_types
 
@@ -26,22 +27,33 @@ class SqlDb(object):
                     "Database={};"
                     "Trusted_Connection=yes".format(server, db_name))
         self.database = db_name
-        self.conn = pyodbc.connect(conn_str)
+        
+        try:
+            self.conn = pyodbc.connect(conn_str)
+        except Exception as error:
+            print("Could not establish connection to {} due to: {}".format(server, error))
 
     def __del__(self):
         self.conn.close()
 
     def query(self, sql, read_query = False):
+        '''
+        To complete
+        '''
         with self.conn.cursor() as cursor:
             cursor.execute(sql)
             if read_query: return cursor.fetchall()
             else: self.conn.commit()
 
     def create_table(self, table_name, dataframe):
+        '''
+        To complete
+        '''
         self.query("DROP TABLE IF EXISTS {}".format(table_name))
         
         # Get column names and types
-        column_names = [c.replace(" ", "_") for c in list(dataframe.columns.values)]
+        #column_names = [c.replace(" ", "_") for c in list(dataframe.columns.values)]
+        column_names = [re.sub('[^A-Za-z0-9]+', '_', c) for c in list(dataframe.columns.values)]
         column_types = get_column_types(dataframe.dtypes)
 
         # Create new table
@@ -49,7 +61,7 @@ class SqlDb(object):
         for i in range(len(column_names)):
             create_table_query = create_table_query + '\n' + column_names[i] + ' ' + column_types[i] + ','
         create_table_query = create_table_query[:-1] + " );"
-
+        
         try: 
             self.query(create_table_query)
             self.update_table(table_name, dataframe, column_names)
@@ -57,8 +69,13 @@ class SqlDb(object):
             print("An error occured whilst creating and updating table {}: {}".format(table_name, error))
 
     def update_table(self, table_name, dataframe, column_names):
+        '''
+        To complete
+        '''
+        # Convert na values to NULL for SQL 
+        dataframe.fillna("NULL", inplace=True)
         # Convert timestamp format to a date string
-        date_cols_to_reformat = [i for i, x in enumerate(dataframe.dtypes) if x == "datetime64[ns, UTC]"]
+        date_cols_to_reformat = [i for i, x in enumerate(dataframe.dtypes) if x in ["datetime64[ns, UTC]", "datetime64[ns]"]]
     
         for index, row in dataframe.iterrows():
             update_values = row.values
@@ -66,7 +83,6 @@ class SqlDb(object):
                 update_values[c] = "'" + update_values[c].strftime('%Y-%m-%d %X') + "'"
             
             update_table_query = "INSERT INTO {} ({}) values({})".format(table_name, ','.join(column_names), ','.join([str(n) for n in update_values]))
-            #print(update_table_query)
             self.query(update_table_query)
 
         # confirm transaction 
