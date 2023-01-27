@@ -1,7 +1,7 @@
 # Libraries to import
 import pandas as pd
 import yfinance as yf
-import datetime
+import datetime as dt
 import sql_functions as sql
 
 # Global variables
@@ -20,4 +20,5 @@ def get_price_history_yahoo(ticker, start_date, end_date, interval, sql_conn = N
     return historical_prices
 
 conn = sql.SqlDb("tcp:AUCLD04018656,1433","team_five_aiml_group")
-get_price_history_yahoo("BTC-AUD", datetime.datetime(2020,2,1), datetime.datetime(2023,2,1), "1d", conn)
+get_price_history_yahoo("BTC-AUD", dt.datetime(2020,2,1), dt.datetime(2023,2,1), "1d", conn)
+conn.__del__
