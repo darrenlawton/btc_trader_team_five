@@ -1,6 +1,7 @@
 # Libraries to import
 import pyodbc
 import re
+import pandas as pd
 
 # Global variables
 DATA_TYPE_MAPPING = {
@@ -42,7 +43,11 @@ class SqlDb(object):
         '''
         with self.conn.cursor() as cursor:
             cursor.execute(sql)
-            if read_query: return cursor.fetchall()
+            if read_query: 
+                rows = cursor.fetchall()
+                values = [list(row) for row in rows]
+                column_names = [column[0] for column in cursor.description]
+                return pd.DataFrame(values, columns=column_names)
             else: self.conn.commit()
 
     def create_table(self, table_name, dataframe):
