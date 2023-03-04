@@ -39,6 +39,7 @@ if __name__ == "__main__":
     '''
     To complete
     '''
+
     # Create SQL Server connection to database
     conn = sql.SqlDb(DB_SERVER, DB_NAME)
 
