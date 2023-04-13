@@ -57,7 +57,6 @@ class SqlDb(object):
         self.query("DROP TABLE IF EXISTS {}".format(table_name))
         
         # Get column names and types
-        #column_names = [c.replace(" ", "_") for c in list(dataframe.columns.values)]
         column_names = [re.sub('[^A-Za-z0-9]+', '_', c) for c in list(dataframe.columns.values)]
         column_types = get_column_types(dataframe.dtypes)
 
@@ -89,9 +88,8 @@ class SqlDb(object):
             
             update_table_query = "INSERT INTO {} ({}) values({})".format(table_name, ','.join(column_names), ','.join([str(n) for n in update_values]))
             self.query(update_table_query)
-
+        
         # confirm transaction 
         confirmation_query = "SELECT count(*) from {};".format(table_name)
-        print("{} of {} rows have successfully been writen to {}".format(self.query(confirmation_query, True)[0][0], dataframe.shape[0], table_name))
- 
+        print("{} of {} rows have successfully been writen to {}".format(self.query(confirmation_query, True).iloc[0].values[0], dataframe.shape[0], table_name))
 
