@@ -1,0 +1,22 @@
+<mxfile host="app.diagrams.net" modified="2023-05-08T01:32:59.133Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" etag="qHGxcSiAQ6b1-12R1GqM" version="21.2.9" type="device">
+  <diagram name="Page-1" id="MbPIoLCYzm2UvwKp_Dsx">
+    <mxGraphModel dx="994" dy="1037" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="0FbL3BM-fjs-OR3EF8PD-1" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="80" y="80" width="560" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="0FbL3BM-fjs-OR3EF8PD-2" value="&lt;b style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 20px;&quot;&gt;Task Environment&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;b&gt;Performance Measure:&lt;/b&gt;&lt;br&gt;maximise daily profit&lt;br&gt;&amp;nbsp;&lt;br&gt;&lt;b&gt;Environment Description:&lt;br&gt;&lt;/b&gt;partially observable - the agent does not have all information to inform a decision&lt;br&gt;stochastic - a probability distribution would exist of daily returns given input data&lt;br&gt;episodic - daily, one step, event&lt;br&gt;continuous - since predicting price&lt;br&gt;&lt;br&gt;&lt;b&gt;Action Set:&lt;br&gt;&lt;/b&gt;predict bitcoin price for t+1&amp;nbsp;&lt;br&gt;set a risk tolerance&lt;br&gt;set trade size as percentage of available balance&lt;br&gt;&lt;br&gt;&lt;b&gt;Input Data:&lt;/b&gt;&lt;br&gt;historical set to t&lt;br&gt;tweet data for notable accounts&lt;br&gt;cointelegraph new headlines" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="769" y="80" width="360" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="P9EQj0Z5kd69bNzDYWZz-1" value="" style="endArrow=classic;html=1;rounded=0;exitX=-0.008;exitY=0.133;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.998;entryY=0.13;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="0FbL3BM-fjs-OR3EF8PD-2" target="0FbL3BM-fjs-OR3EF8PD-1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="750" y="160" as="sourcePoint" />
+            <mxPoint x="650" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
